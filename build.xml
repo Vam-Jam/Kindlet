@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="azw2" name="HelloWorld">
+  <property file="kindlet.properties"/>
+
+	<taskdef name="retroweaver" classname="net.sourceforge.retroweaver.ant.RetroWeaverTask">
+		<classpath>
+			<pathelement location="lib/retroweaver-all-2.0.7.jar" />
+		</classpath>
+	</taskdef>
+
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.5" />
+	<property name="source" value="1.5" />
+
+  <property name="keystorePath" value="signing/developer.keystore" />
+	<property name="keystorePass" value="password" />
+	<property name="signName" value="test" />
+	<property name="kindleIP" value="192.168.15.244" />
+
+	<path id="app.classpath">
+		<pathelement location="bin" />
+    <pathelement location="lib/Kindlet-1.3.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+  <target name="clean">
+    <exec executable="sshpass">
+      <arg value="-p 'kajbwdjkawd'"/>
+      <arg value="/usr/bin/echo ${ant.project.name}.azw2 root@${kindleIP}:/mnt/us/documents/" />
+    </exec>
+		<!--<delete dir="bin" />-->
+	</target>
+
+	<target depends="clean" name="cleanall" />
+
+  <target name="weave" depends="build">
+    <unzip src="lib/asm-3.1.jar" dest="bin" />
+    <unzip src="lib/retroweaver-rt-2.0.7.jar" dest="bin" />
+    <exec dir="bin" executable="${java_path}/java">
+		  <arg value="-cp"/>
+      <arg value="${user.dir}/lib/retroweaver-all-2.0.7.jar" />
+      <arg value="net.sourceforge.retroweaver.Weaver"/>
+			<arg value="-source" />
+			<arg value="${user.dir}/bin" />
+    </exec>
+  </target>
+
+	<!--<target name="weave" depends="build">-->
+	<!--	<unzip src="lib/asm-3.1.jar" dest="bin" />-->
+	<!--	<unzip src="lib/retroweaver-rt-2.0.7.jar" dest="bin" />-->
+	<!--	<retroweaver srcdir="bin" />-->
+	<!--</target>-->
+
+	<target name="jar" depends="weave">
+		<jar destfile="${ant.project.name}.jar"
+			manifest="kindlet.manifest">
+			<fileset dir="bin"/>
+      <fileset dir="." includes="res/**"/>
+    </jar>
+	</target>
+
+	<target depends="init" name="build">
+		<echo message="${ant.project.name}: ${ant.file}" />
+    <javac executable="${java_path}/javac" debug="true" fork="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}" >
+			<src path="src" />
+			<classpath refid="app.classpath" />
+		</javac>
+	</target>
+
+	<target name="sign" depends="jar">
+    <signjar executable="${java_path}/jarsigner" jar="${ant.project.name}.jar" alias="dn${signName}" storepass="${keystorePass}" keystore="${keystorePath}" />
+		<signjar executable="${java_path}/jarsigner" jar="${ant.project.name}.jar" alias="di${signName}" storepass="${keystorePass}" keystore="${keystorePath}"  />
+		<signjar executable="${java_path}/jarsigner" jar="${ant.project.name}.jar" alias="dk${signName}" storepass="${keystorePass}" keystore="${keystorePath}"  />
+		<!--digestalg="SHA1" sigalg="SHA1withDSA"-->
+	</target>
+
+	<target name="azw2" depends="sign">
+		<move file="${ant.project.name}.jar" tofile="${ant.project.name}.azw2" />
+	</target>
+
+  <target name="deploy" depends="azw2">
+    <!--<exec executable="scp">-->
+    <!--  <arg value="${ant.project.name}.azw2" />-->
+    <!--  <arg value="root@${kindleIP}:/mnt/us/documents/" />-->
+      <!--</exec>-->
+    <exec executable="./deploy.sh">
+      <arg value="${ant.project.name}.azw2" />
+      <arg value="${kindleIP}" />
+    </exec>
+		<!--<scp file="${ant.project.name}.azw2" todir="root@${kindleIP}:/mnt/us/documents/" password="fiona156" trust="true"/>-->
+	</target>
+</project>

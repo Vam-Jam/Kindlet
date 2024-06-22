@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.test.app.Main
+Implementation-Title: Hello, world!
+Implementation-Version: 1
+Implementation-Vendor: Your Name Here
