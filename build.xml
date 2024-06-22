@@ -34,11 +34,7 @@
 	</target>
 
   <target name="clean">
-    <exec executable="sshpass">
-      <arg value="-p 'kajbwdjkawd'"/>
-      <arg value="/usr/bin/echo ${ant.project.name}.azw2 root@${kindleIP}:/mnt/us/documents/" />
-    </exec>
-		<!--<delete dir="bin" />-->
+		<delete dir="bin" />
 	</target>
 
 	<target depends="clean" name="cleanall" />
