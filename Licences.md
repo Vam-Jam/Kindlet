@@ -12,4 +12,4 @@ lib/retroweaver*: retroweaver is covered by the BSD license.
 
 lib/asm*: ASM is covered by the BSD license.
 
-The full text of all these licenses are enclosed in the doc folder.
+The full text of all these licenses are enclosed in the licences folder.
