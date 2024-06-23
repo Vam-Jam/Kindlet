@@ -71,6 +71,10 @@ If you plan to share your kindlets, use [KindleTool](https://www.mobileread.com/
 
 - Use [JNI](https://www.mobileread.com/forums/showthread.php?t=175899) to escape the sandbox and or expand what you can do
 
+- Using [FBInk](https://github.com/NiLuJe/FBInk) to print text and images directly to the framebuffer
+
+- Using [Linux framebuffer](https://en.wikipedia.org/wiki/Linux_framebuffer) to avoid using java
+
 ## Caveats
 
 The kindles CVM (compact virtual machine) is very fragile. There are a lot of missing features.
@@ -86,6 +90,15 @@ The kindles CVM (compact virtual machine) is very fragile. There are a lot of mi
 
 ### Debugging
 You'll want to keep an eye on ``/var/log/messages`` and ``/mnt/us/development/APP_NAME/work/crash.log``. The messages you get will often not be very verbose.
+
+## Credits
+This repo was made using public resources, none of which has been ripped out the kindle directly or from other proprietary sources.
+
+I made this as a resource for others to use as there is not much on compiling a Kindlet using modern tools. 
+
+- [Cowlark](http://cowlark.com/kindle/index.html)
+- [Mobileread](https://www.mobileread.com/forums/forumdisplay.php?f=150)
+- [SixFoisNeuf](https://www.sixfoisneuf.fr/posts/kindle-hacking-porting-doom/)
 
 
 
