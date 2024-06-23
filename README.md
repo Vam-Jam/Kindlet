@@ -82,6 +82,7 @@ The kindles CVM (compact virtual machine) is very fragile. There are a lot of mi
 - enums cant be backported
 - Avoid doing any network calls, their threads often cause crashes, and it does not support modern SSL standards (uses TLS 1.0/1.1). You can work around this by using JNI with a modern library
 - Avoid using callbacks in JNI threads, it wont crash but it will cause the UI to ignore all user inputs in that new thread
+- CVM will crash every now and then because of a bug that triggers GNU LIBC run-time protections. You can fix this by adding `MALLOC_CHECK_=0` to your `start.sh` file in `/opt/amazon/ebook/bin/start.sh`
 
 ### Debugging
 You'll want to keep an eye on ``/var/log/messages`` and ``/mnt/us/development/APP_NAME/work/crash.log``. The messages you get will often not be very verbose.
