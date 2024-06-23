@@ -35,7 +35,11 @@
 
   <target name="clean">
 		<delete dir="bin" />
-	</target>
+  </target>
+
+  <target name="doc" depends="build">
+    <javadoc sourcepath="src" destdir="doc" classpathref="app.classpath" />
+  </target>
 
 	<target depends="clean" name="cleanall" />
 
@@ -85,14 +89,9 @@
 	</target>
 
   <target name="deploy" depends="azw2">
-    <!--<exec executable="scp">-->
-    <!--  <arg value="${ant.project.name}.azw2" />-->
-    <!--  <arg value="root@${kindleIP}:/mnt/us/documents/" />-->
-      <!--</exec>-->
     <exec executable="./deploy.sh">
       <arg value="${ant.project.name}.azw2" />
       <arg value="${kindleIP}" />
     </exec>
-		<!--<scp file="${ant.project.name}.azw2" todir="root@${kindleIP}:/mnt/us/documents/" password="fiona156" trust="true"/>-->
 	</target>
 </project>
